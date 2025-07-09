@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_task, only: %i[ show edit update destroy ]
+  before_action :set_task, only: %i[ show edit update destroy complete ]
 
   def index
     if params[:category_id].present?
@@ -43,7 +43,14 @@ class TasksController < ApplicationController
   end
 
   def today
-    @tasks = current_user.tasks.where(due_date: Date.current)
+    @tasks = current_user.tasks
+      .where("due_date <= ? OR due_date IS NULL", Date.current)
+      .order(due_date: :asc, created_at: :desc)
+  end
+
+  def complete
+    @task.update(completed: true)
+    redirect_to @task, notice: "Task was successfully marked as completed."
   end
 
   private
