@@ -1,10 +1,112 @@
-<h2><%= @task.title %></h2>
-<p><strong>Description:</strong> <%= @task.description %></p>
-<p><strong>Due Date:</strong> <%= @task.due_date %></p>
-<p><strong>Category:</strong> <%= @task.category.name if @task.category %></p>
-<p><strong>Completed:</strong> <%= @task.completed ? "Yes" : "No" %></p>
-<%= link_to 'Edit', edit_task_path(@task), class: "btn btn-warning" %>
-<%= link_to 'Back', tasks_path, class: "btn btn-secondary" %>
-<%= link_to 'Delete', task_path(@task), 
-    data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, 
-    class: "btn btn-danger btn-sm" %>
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><%= link_to "Tasks", tasks_path %></li>
+          <li class="breadcrumb-item active" aria-current="page">Task Details</li>
+        </ol>
+      </nav>
+    </div>
+    <div>
+      <%= link_to tasks_path, class: "btn btn-outline-secondary" do %>
+        <i class="bi bi-arrow-left me-1"></i> Back to Tasks
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+      <h2 class="card-title h4 mb-0"><%= @task.title %></h2>
+      <span class="badge <%= @task.completed ? 'bg-success' : 'bg-warning text-dark' %> rounded-pill px-3 py-2">
+        <i class="bi <%= @task.completed ? 'bi-check-circle' : 'bi-clock' %> me-1"></i>
+        <%= @task.completed ? "Completed" : "Pending" %>
+      </span>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-8">
+          <% if @task.description.present? %>
+            <h5 class="text-muted mb-3">Description</h5>
+            <div class="p-3 bg-light rounded mb-4">
+              <%= simple_format(@task.description) %>
+            </div>
+          <% else %>
+            <div class="text-muted fst-italic mb-4">No description provided</div>
+          <% end %>
+        </div>
+        <div class="col-md-4">
+          <div class="card bg-light border-0">
+            <div class="card-body">
+              <h5 class="card-title h6 mb-3">Task Details</h5>
+              
+              <div class="mb-3">
+                <div class="text-muted small">Due Date</div>
+                <% if @task.due_date %>
+                  <div class="<%= @task.due_date < Date.today ? 'text-danger' : '' %> fw-medium">
+                    <i class="bi bi-calendar-event me-1"></i>
+                    <%= @task.due_date.strftime("%B %d, %Y") %>
+                  </div>
+                <% else %>
+                  <div class="text-muted">Not specified</div>
+                <% end %>
+              </div>
+              
+              <div class="mb-3">
+                <div class="text-muted small">Category</div>
+                <% if @task.category %>
+                  <div>
+                    <span class="badge rounded-pill bg-light text-dark border px-3 py-2">
+                      <i class="bi bi-folder me-1"></i>
+                      <%= @task.category.name %>
+                    </span>
+                  </div>
+                <% else %>
+                  <div class="text-muted">Uncategorized</div>
+                <% end %>
+              </div>
+              
+              <div>
+                <div class="text-muted small">Created</div>
+                <div class="small">
+                  <i class="bi bi-clock-history me-1"></i>
+                  <%= @task.created_at.strftime("%b %d, %Y at %I:%M %p") %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer bg-white border-top d-flex justify-content-between py-3">
+      <div>
+        <%= link_to edit_task_path(@task), class: "btn btn-warning" do %>
+          <i class="bi bi-pencil me-1"></i> Edit Task
+        <% end %>
+      </div>
+      <div>
+        <%= link_to task_path(@task), 
+            data: { turbo_method: :delete, turbo_confirm: 'Are you sure you want to delete this task?' }, 
+            class: "btn btn-outline-danger" do %>
+          <i class="bi bi-trash me-1"></i> Delete Task
+        <% end %>
+      </div>
+    </div>
+  </div>
+  
+  <% if @task.completed %>
+    <div class="alert alert-success border-start border-4 shadow-sm">
+      <div class="d-flex align-items-center">
+        <i class="bi bi-check-circle-fill fs-4 me-2"></i>
+        <div>
+          <strong>Task completed!</strong>
+          <div class="text-muted small">This task has been marked as completed.</div>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="d-grid gap-2 col-md-6 mx-auto">
+      <%= button_to "Mark as Completed", complete_task_path(@task), method: :patch, class: "btn btn-success btn-lg" %>
+    </div>
+  <% end %>
+</div>

@@ -3,7 +3,11 @@ Rails.application.routes.draw do
   devise_for :users
   resources :categories
   get "tasks/today", to: "tasks#today", as: "today_tasks"
-  resources :tasks
+  resources :tasks do
+    member do
+      patch :complete
+    end
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

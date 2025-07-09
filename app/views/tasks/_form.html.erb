@@ -10,20 +10,20 @@
     </div>
   <% end %>
   <div class="mb-3">
-    <%= form.label :title %>
+    <%= form.label :title, class: "form-label" %>
     <%= form.text_field :title, class: "form-control" %>
   </div>
   <div class="mb-3">
-    <%= form.label :description %>
+    <%= form.label :description, class: "form-label" %>
     <%= form.text_area :description, class: "form-control" %>
   </div>
   <div class="mb-3">
-    <%= form.label :due_date %>
+    <%= form.label :due_date, class: "form-label" %>
     <%= form.date_field :due_date, class: "form-control" %>
   </div>
   <div class="mb-3">
-    <%= form.label :category_id, "Category" %>
-    <%= form.collection_select :category_id, current_user.categories, :id, :name, prompt: "Select Category", class: "form-control" %>
+    <%= form.label :category_id, "Category", class: "form-label" %>
+    <%= form.collection_select :category_id, current_user.categories, :id, :name, { prompt: "Select Category" }, { class: "form-select" } %>
   </div>
   <div class="form-check mb-3">
     <%= form.check_box :completed, class: "form-check-input" %>
