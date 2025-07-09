@@ -1,11 +1,8 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
   title: MyString
   description: MyText
   due_date: 2025-07-09
-  category: MyString
-  references: MyString
+  category: one
   user: one
   completed: false
 
@@ -13,7 +10,6 @@ two:
   title: MyString
   description: MyText
   due_date: 2025-07-09
-  category: MyString
-  references: MyString
+  category: two
   user: two
   completed: false
