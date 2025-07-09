@@ -3,7 +3,11 @@ class TasksController < ApplicationController
   before_action :set_task, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @tasks = current_user.tasks
+    if params[:category_id].present?
+      @tasks = current_user.tasks.where(category_id: params[:category_id])
+    else
+      @tasks = current_user.tasks
+    end
   end
 
   def show

@@ -1,5 +1,21 @@
 <h1>Your Tasks</h1>
 <%= link_to 'New Task', new_task_path, class: "btn btn-success mb-3" %>
+<%= form_with url: tasks_path, method: :get, local: true, class: "mb-3" do %>
+  <div class="row g-2 align-items-center">
+    <div class="col-auto">
+      <%= label_tag :category_id, "Filter by Category:" %>
+    </div>
+    <div class="col-auto">
+      <%= select_tag :category_id, options_from_collection_for_select(current_user.categories, :id, :name, params[:category_id]), include_blank: "All Categories", class: "form-select" %>
+    </div>
+    <div class="col-auto">
+      <%= submit_tag "Filter", class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
+<% if params[:category_id].present? && current_user.categories.exists?(params[:category_id]) %>
+  <p>Showing tasks for category: <strong><%= current_user.categories.find(params[:category_id]).name %></strong></p>
+<% end %>
 <table class="table table-striped">
   <thead>
     <tr>
