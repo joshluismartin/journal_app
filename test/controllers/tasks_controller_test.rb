@@ -1,7 +1,11 @@
 require "test_helper"
 
 class TasksControllerTest < ActionDispatch::IntegrationTest
-  setup do
+  include Devise::Test::IntegrationHelpers
+
+  def setup
+    @user = users(:one)
+    sign_in @user
     @task = tasks(:one)
   end
 
@@ -16,10 +20,9 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create task" do
-    assert_difference("Task.count") do
-      post tasks_url, params: { task: { category: @task.category, completed: @task.completed, description: @task.description, due_date: @task.due_date, references: @task.references, title: @task.title, user_id: @task.user_id } }
+    assert_difference("Task.count", 1) do
+      post tasks_url, params: { task: { title: "New Task", category_id: @task.category_id, user_id: @user.id, due_date: Date.today } }
     end
-
     assert_redirected_to task_url(Task.last)
   end
 
@@ -34,15 +37,16 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update task" do
-    patch task_url(@task), params: { task: { category: @task.category, completed: @task.completed, description: @task.description, due_date: @task.due_date, references: @task.references, title: @task.title, user_id: @task.user_id } }
+    patch task_url(@task), params: { task: { title: "Updated Task" } }
     assert_redirected_to task_url(@task)
+    @task.reload
+    assert_equal "Updated Task", @task.title
   end
 
   test "should destroy task" do
     assert_difference("Task.count", -1) do
       delete task_url(@task)
     end
-
     assert_redirected_to tasks_url
   end
 end
