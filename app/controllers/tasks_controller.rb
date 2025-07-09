@@ -38,6 +38,10 @@ class TasksController < ApplicationController
     redirect_to tasks_url, notice: "Task was successfully destroyed."
   end
 
+  def today
+    @tasks = current_user.tasks.where(due_date: Date.current)
+  end
+
   private
 
   def set_task
