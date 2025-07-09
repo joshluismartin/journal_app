@@ -27,7 +27,7 @@
           <%= link_to "Tasks", tasks_path, class: "nav-link d-inline" %>
           <%= link_to "Today's Tasks", today_tasks_path, class: "nav-link d-inline" %>
           <% if user_signed_in? %>
-            <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "nav-link d-inline text-danger" %>
+            <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete }, class: "nav-link d-inline text-danger" %>
           <% else %>
             <%= link_to "Login", new_user_session_path, class: "nav-link d-inline" %>
           <% end %>
